@@ -8,4 +8,9 @@ RUN npm ci
 COPY ./src ./src
 COPY ./public ./public
 
-CMD [ "npm", "run", "start" ]
+COPY ./postcss.config.js ./
+COPY ./next.config.js ./
+COPY ./tailwind.config.ts ./
+COPY ./tsconfig.json ./
+
+CMD [ "npm", "run", "dev" ]

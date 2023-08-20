@@ -1,0 +1,56 @@
+import AlertError from '@/components/AlertError/AlertError'
+import ImageController from '@/components/ImageController.tsx/ImageController'
+
+import { useImages } from '@/hooks/hooks'
+import { useCallback, useEffect, useState } from 'react'
+
+export default function Home() {
+  const { data: images, error, isLoading } = useImages()
+  const [selectedImage, setSelectedImage] = useState<string>('')
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0)
+
+  useEffect(() => {
+    if (selectedImage) return
+    if (!images || images.length === 0) return
+
+    setSelectedImage(images[selectedImageIndex].file_stem)
+    setSelectedImageIndex(selectedImageIndex)
+  }, [selectedImage, images, selectedImageIndex])
+
+  const onLeftClick = useCallback(() => {
+    if (selectedImageIndex < 1) return
+    const newIndex = selectedImageIndex - 1
+    setSelectedImageIndex(newIndex)
+    setSelectedImage(images[newIndex].file_stem)
+  }, [images, setSelectedImage, selectedImageIndex, setSelectedImageIndex])
+
+  const onRightClick = useCallback(() => {
+    if (selectedImageIndex >= images.length - 1) return
+    const newIndex = selectedImageIndex + 1
+    setSelectedImageIndex(newIndex)
+    setSelectedImage(images[newIndex].file_stem)
+  }, [images, setSelectedImage, selectedImageIndex, setSelectedImageIndex])
+
+  return (
+    <main className="flex min-h-screen flex-col items-center p-24">
+      {error && (
+        <AlertError message={error.message} />
+      )}
+      {isLoading && <span className="loading loading-ring loading-lg"></span>}
+      {!isLoading && !error && selectedImage !== '' && (
+        <>
+          <ImageController image_stem={selectedImage} />
+          <div className="join mt-5">
+            <button onClick={onLeftClick} className="join-item btn w-20">
+              «
+            </button>
+            <button className="join-item btn">{`image ${selectedImageIndex + 1} of ${images.length}`}</button>
+            <button onClick={onRightClick} className="join-item btn w-20">
+              »
+            </button>
+          </div>
+        </>
+      )}
+    </main>
+  )
+}
