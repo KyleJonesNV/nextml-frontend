@@ -30,6 +30,18 @@ It should be possible to run the application with the original setup
 docker compose up --build 
 ```
 
+
+
+
+## Demo
+
+https://github.com/KyleJonesNV/nextml-frontend/assets/93512808/2887d99e-83e9-4ea7-aaa6-6e58c61191f2
+
+
+
+
+
+
 # Assignment
 
 Build a simple frontend based on this boilerplate for these user stories:
