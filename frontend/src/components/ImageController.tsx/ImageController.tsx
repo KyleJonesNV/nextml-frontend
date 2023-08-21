@@ -6,8 +6,9 @@ import AlertError from '../AlertError/AlertError'
 import ZoomInButton from '../ZoomInButton/ZommInButton'
 import ZoomOutButton from '../ZoomOutButton/ZommOutButton'
 import Comment from '../Comment/Comment'
+import Loader from '../Loader/Loader'
 
-const baseWidth = 500
+const baseWidth = 800
 const aspectRatio = 1.5
 const deltaZoom = 0.2
 const zoomInLimit = 3
@@ -36,7 +37,7 @@ export default function ImageController({ image_stem }: { image_stem: string }) 
       {error && <AlertError message={error.message} />}
       {isLoading ? (
         <div className="flex justify-center">
-          <span className="loading loading-ring loading-lg"></span>
+          <Loader />
         </div>
       ) : (
         <div className="flex flex-row gap-5">

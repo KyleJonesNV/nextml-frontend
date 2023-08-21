@@ -1,25 +1,8 @@
 import { useCommentStore } from '@/store/commentStore'
-import { useCallback, useEffect, useState } from 'react'
-
-const pointRadius = 12
+import { useCallback, useEffect } from 'react'
+import { PointOnImage } from '../PointOnImage/PointOnImage';
+import Image from 'next/image'
 const drawableId = 'drawableArea'
-
-function PointOnImage({ index, point, imageWidth, imageHeight }: { index: number, point: Point; imageWidth: number; imageHeight: number }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        width: pointRadius * 2,
-        height: pointRadius * 2,
-        backgroundColor: 'rgba(207, 73, 45,.7)',
-        borderRadius: '50%',
-        left: `${point.x * imageWidth - pointRadius}px`,
-        top: `${point.y * imageHeight - pointRadius}px`
-      }}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{index + 1}</div>
-    </div>
-  )
-}
 
 export default function ImageRenderer({ imageId, image, width, height }: { imageId: string; image: string; width: number; height: number }) {
   const addPoint = useCommentStore((state) => state.addPoint)
@@ -29,10 +12,12 @@ export default function ImageRenderer({ imageId, image, width, height }: { image
     (event: any) => {
       if (event.target?.offsetParent?.id !== drawableId) return
 
-      const xPositionOnImage = event.clientX - event.target.offsetParent.offsetLeft
+      console.log(event)
+
+      const xPositionOnImage = event.layerX
       const xRelativePosition = xPositionOnImage / event.target.offsetParent.clientWidth
 
-      const yPositionOnImage = event.clientY - event.target.offsetParent.offsetTop
+      const yPositionOnImage = event.layerY
       const yRelativePosition = yPositionOnImage / event.target.offsetParent.clientHeight
 
       const p: Point = {
@@ -54,7 +39,7 @@ export default function ImageRenderer({ imageId, image, width, height }: { image
 
   return (
     <div style={{ position: 'relative', width: `${width}px`, height: `${height}px` }} id={drawableId}>
-      <img src={image} alt="" />
+      <Image src={image} alt="" width={width} height={height} />
       {commentPoints && commentPoints.map((commentPoint, i) => <PointOnImage key={i} index={i} point={commentPoint.point} imageWidth={width} imageHeight={height} />)}
     </div>
   )
